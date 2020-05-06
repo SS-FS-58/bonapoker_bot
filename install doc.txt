@@ -1,0 +1,31 @@
+1.install pip https://pip.pypa.io/en/stable/installing/
+- curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+- python get-pip.py
+2. install packages
+- pip install matplotlib
+- pip install PyQt5
+- pip install pytesseract
+- pip install win32gui
+- pip install configobj
+- pip install pywin32
+- pip install virtualbox
+- pip install pandas
+- pip install pymongo
+- pip install requests
+- pip install lmfit
+- pip install opencv-python
+- pip install pygetwindow
+- pip install keyboard
+
+3. install mongodb
+- install mongodb community
+- setting environment variable 
+- creating directory  c:/data/db
+- rinning on cmd window command mongod
+- testing on cmd window command mongo and db then test
+- create database for bonapokerbot project
+  "POKER"
+	collection is "internal", "strategies"
+- import strategies.json and internal.json files
+
+4. screenshot file path test/
