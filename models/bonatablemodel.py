@@ -16,9 +16,11 @@ Toney_split_blinds_next = r'Next blinds: '
 Toney_split_blinds_ante = r'ante '
 room_number_split_string = r' #'
 blind_split_string = r'/'
-Tbt_tilte_124 = '124'
-Tbt_tilte_248 = '248'
-Tbt_tilte_51020 = '51020'
+Tbt_title_025051 = '025051'
+Tbt_title_0512 = '0512'
+Tbt_titie_124 = '124'
+Tbt_title_248 = '248'
+Tbt_title_51020 = '51020'
 # tbt_timeout_format = r'%H:%M:%S'
 
 class TableTypes(Enum):
@@ -113,7 +115,7 @@ class BonaTableModel(object):
 
             return self.table_title
         # TBT new title name Table 124, 248, 51020
-        elif table_name.find(Tbt_tilte_124) != -1 or table_name.find(Tbt_tilte_248) != -1 or table_name.find(Tbt_tilte_51020) != -1:
+        elif table_name.find(Tbt_titie_124) != -1 or table_name.find(Tbt_title_248) != -1 or table_name.find(Tbt_title_51020) != -1 or table_name.find(Tbt_title_025051) != -1 :
             # Get Table tiltle
             self.table_title = table_name.split(Name_Time_split_string)[0]
             
@@ -122,11 +124,13 @@ class BonaTableModel(object):
             self.timeout = datetime.now() + self.remnent_time
 
             # Get Big Blind and Small blind
-            if table_name.find(Tbt_tilte_124) != -1:
+            if table_name.find(Tbt_titie_124) != -1:
                 self.smallBlind = 1
-            elif table_name.find(Tbt_tilte_248) != -1:
+            elif table_name.find(Tbt_title_025051) != -1:
+                self.smallBlind = 0.25
+            elif table_name.find(Tbt_title_248) != -1:
                 self.smallBlind = 2
-            elif table_name.find(Tbt_tilte_51020) != -1:
+            elif table_name.find(Tbt_title_51020) != -1:
                 self.smallBlind = 5
 
             self.bigBlind = 2 * self.smallBlind
@@ -258,15 +262,19 @@ class BonaTableModelController(object):
         # Case of TBT room 
         else:
             # Case of TBT 124 room
-            if (title.find(Tbt_tilte_124) != -1):
+            if (title.find(Tbt_title_124) != -1):
+                table_name = title.split(Name_Time_split_string)[0]
+                return table_name
+            # Case of TBT 025051 room
+            elif (title.find(Tbt_title_025051) != -1):
                 table_name = title.split(Name_Time_split_string)[0]
                 return table_name
             # Case of TBT 248 room
-            elif (title.find(Tbt_tilte_248) != -1):
+            elif (title.find(Tbt_title_248) != -1):
                 table_name = title.split(Name_Time_split_string)[0]
                 return table_name
             # Case of TBT 51020 room
-            elif (title.find(Tbt_tilte_51020) != -1):
+            elif (title.find(Tbt_title_51020) != -1):
                 table_name = title.split(Name_Time_split_string)[0]
                 return table_name
             # Case of TBT 248 room
