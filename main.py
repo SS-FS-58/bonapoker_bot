@@ -29,10 +29,10 @@ import pygetwindow as gw
 import random
 
 # Current version 
-version = 2.31
+version = 2.33
 
 # Table Title search strings
-Bonapoker_title_string1 = r'德州扑克'
+Bonapoker_title_string1 = r'BONA NLHE'
 # Bonapoker_title_string1 = r'timeshow'
 # Bonapoker_title_string1 = r'POKARA'
 Bonapoker_title_string3 = r'Freeroll'
@@ -41,7 +41,7 @@ Bonapoker_title_string4 = r'124'
 Bonapoker_title_string_general = r'Holdem NL'
 
 # Where do you save the table screenshot
-image_backup_filepath = r'f:\24_Poker_bot\04_backup\Test'
+image_backup_filepath = r'e:\1_Previous_Projects\24_Poker_bot\05_final_version\screenshot_log'
 screenshot_mode = False
 # How many Windows Manager update every seconds
 windows_update_time = 30
@@ -52,7 +52,7 @@ bona_window_width = 503
 bona_window_height = 1040
 
 # You can set table display left and width value.
-display_left = 0
+display_left = - win32api.GetSystemMetrics(0)
 display_width = win32api.GetSystemMetrics(0) - display_left
 
 # You can set delay time for mouse after decision of bot

@@ -507,7 +507,7 @@ class TableScreenBased(Table):
             pil_image = self.crop_image(self.entireScreenPIL, fd[0], fd[1],
                                         fd[2], fd[3])
             points_x = {}
-            suits="0123456789d"
+            suits="0123456789dk"
             for j in suits :
                 name = "pics/" + self.tbl[0:2] + "/pot_number/" + j + ".png"
                 template = Image.open(name)
@@ -539,11 +539,19 @@ class TableScreenBased(Table):
             for val in sorted_d.values():
                 val = val.replace("d",".")
                 value += val
-            
-            if value != '': 
-                value = float(value) 
-            else:
+            #Kilo detect
+            kilo = 1
+            if value.find('k') == len(value) - 1:
+                kilo = 1000
+                value = value.replace('k','')
+            if value == '':
                 value = 0
+            else:
+                value = float(value) * kilo
+            # if value != '': 
+            #     value = float(value) 
+            # else:
+            #     value = 0
             # if i == 1:
             #     value = value/100
             self.other_players[i]['funds'] = value
@@ -590,7 +598,7 @@ class TableScreenBased(Table):
             # self.gui_signals.signal_progressbar_increase.emit(1)
             pil_image = self.crop_image(self.entireScreenPIL, fd[0], fd[1],fd[2], fd[3])
             points_x = {}
-            suits="0123456789d"
+            suits="0123456789dk"
             for j in suits :
                 name = "pics/" + self.tbl[0:2] + "/otherplayers_potnumber/" + j + ".png"
                 template = Image.open(name)
@@ -616,9 +624,16 @@ class TableScreenBased(Table):
                 value = value.replace('d','', 1)
             else:
                 value = value.replace('d','.', 1)
+            
+            #Kilo detect
+            kilo = 1
+            if value.find('k') == len(value) - 1:
+                kilo = 1000
+                value = value.replace('k','')
+            
             if value != '': 
                 try:
-                    value = float(value) 
+                    value = float(value)  * kilo
                 except:
                     value =0
 
@@ -668,7 +683,7 @@ class TableScreenBased(Table):
         #     # self.logger.debug("Assuming bot pot is 0")
         #     value = 0
         points_x = {}
-        suits="0123456789d"
+        suits="0123456789dk"
         for j in suits :
             name = "pics/" + self.tbl[0:2] + "/otherplayers_potnumber/" + j + ".png"
             template = Image.open(name)
@@ -691,9 +706,15 @@ class TableScreenBased(Table):
             value = value.replace('d','', 1)
         else:
             value = value.replace('d','.', 1)
+        #Kilo detect
+        kilo = 1
+        if value.find('k') == len(value) - 1:
+            kilo = 1000
+            value = value.replace('k','')
+
         if value != '': 
             try:
-                value = float(value) 
+                value = float(value) * kilo
             except:
                 value =0
 
@@ -925,7 +946,7 @@ class TableScreenBased(Table):
             self.gui_signals.signal_progressbar_increase.emit(1)
             pil_image = self.crop_image(self.entireScreenPIL, fd[0], fd[1],fd[2], fd[3])
             points_x = {}
-            suits="0123456789d"
+            suits="0123456789dk"
             for j in suits :
                 # name = "pics/" + self.tbl[0:2] + "/bet_value/" + j + ".png"
                 name = "pics/" + self.tbl[0:2] + "/bet_value/opps/" + j + ".png"
@@ -943,8 +964,14 @@ class TableScreenBased(Table):
             for val in sorted_d.values():
                 val = val.replace("d",".")
                 value += val
+            #Kilo detect
+            kilo = 1
+            if value.find('k') == len(value) - 1:
+                kilo = 1000
+                value = value.replace('k','')
+
             if value != '': 
-                value = float(value) 
+                value = float(value) * kilo
             else:
                 value = 0
             # self.currentBetValue[i]['pot'] = value
@@ -991,7 +1018,7 @@ class TableScreenBased(Table):
         pil_image = self.crop_image(self.entireScreenPIL, func_dict['x1'], func_dict['y1'],
                                     func_dict['x2'], func_dict['y2'])
         points_x = {}
-        suits="0123456789d"
+        suits="0123456789dk"
         for i in suits :
             name = "pics/" + self.tbl[0:2] + "/pot_number/" + i + ".png"
             template = Image.open(name)
@@ -1010,13 +1037,19 @@ class TableScreenBased(Table):
         # for val in sorted_d:
         #     val = val[0].replace("d",".")
         #     value += val
+        
         for val in sorted_d.values():
             val = val.replace("d",".")
             value += val
+        #Kilo detect
+        kilo = 1
+        if value.find('k') == len(value) - 1:
+            kilo = 1000
+            value = value.replace('k','')
         if value == '':
             self.myFunds = 0
         else:
-            self.myFunds = float(value)
+            self.myFunds = float(value) * kilo
         # self.logger.debug("Funds: " + str(self.myFunds))
         # print("My Funds: " + str(self.myFunds))
         return True
@@ -1084,7 +1117,7 @@ class TableScreenBased(Table):
             #                             func_dict['x2'], func_dict['y2'])
             # cv2.imwrite("callvalue.png",np.array(pil_image))
             points_x = {}
-            suits="0123456789d"
+            suits="0123456789dk"
             for i in suits :
                 name = "pics/" + self.tbl[0:2] + "/call_number/" + i + ".png"
                 template = Image.open(name)
@@ -1108,10 +1141,16 @@ class TableScreenBased(Table):
                 value = value.replace('d','', 1)
             else:
                 value = value.replace('d','.', 1)
+            #Kilo detect
+            kilo = 1
+            if value.find('k') == len(value) - 1:
+                kilo = 1000
+                value = value.replace('k','')
             if value == '':
                 self.currentCallValue = 0
             else:
-                self.currentCallValue = float(value.replace(',',''))
+                self.currentCallValue = float(value) * kilo
+            
                 # self.currentCallValue = float(value)
             # self.logger.info("Call button Value: " + str(self.currentCallValue))
             self.minCall = float(self.currentCallValue)
@@ -1165,7 +1204,7 @@ class TableScreenBased(Table):
                                     func_dict['x2'], func_dict['y2'])
         # cv2.imwrite("callvalue.png",np.array(pil_image))
         points_x = {}
-        suits="0123456789d"
+        suits="0123456789dk"
         for i in suits :
             name = "pics/" + self.tbl[0:2] + "/call_number/" + i + ".png"
             template = Image.open(name)
@@ -1183,11 +1222,20 @@ class TableScreenBased(Table):
         for val in sorted_d:
             val = val[0].replace("d",".")
             value += val
-        
+        #Kilo detect
+        kilo = 1
+        if value.find('k') == len(value) - 1:
+            kilo = 1000
+            value = value.replace('k','')
         if value == '':
             self.callbtnValue = 0
         else:
-            self.callbtnValue = float(value)
+            self.callbtnValue = float(value) * kilo
+
+        # if value == '':
+        #     self.callbtnValue = 0
+        # else:
+        #     self.callbtnValue = float(value)
         # self.logger.info("Call button Value: " + str(self.callbtnValue))
         return True    
 
