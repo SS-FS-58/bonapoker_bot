@@ -44,7 +44,7 @@ class Decision(DecisionBase):
         self.decision = DecisionTypes.fold
         t.update_table()
         t.bigBlindMultiplier = t.bigBlind / 0.02
-        self.collusion_bluff_fold_mode = False
+        self.collusion_bluff_fold_mode = True
         pots = [player['pot'] for player in t.other_players if type(player['pot']) != str]
         try:
             self.max_player_pot = max(pots)
@@ -348,7 +348,13 @@ class Decision(DecisionBase):
                 "T9O", "T8O", "98O", "87O"],
                 ]
             # Limpin card set
+            print("table_count" + str(t.playing_players))
             limpin_range_level = round(5 + t.position_utg_plus / 3)
+            if(t.playing_players==2):
+                limpin_range_level = 7 + round(t.position_utg_plus / 2)
+            elif(t.playing_players == 3):
+                limpin_range_level = 6 + round(t.position_utg_plus / 3)
+            
             limpin_cards = set()
             for i in range(limpin_range_level):
                 limpin_cards.update(tier[i])
@@ -356,11 +362,21 @@ class Decision(DecisionBase):
             # Raise Call card set
             raise_call_level = round(2 + t.position_utg_plus / 4)
             raise_call_cards = set()
+            if(t.playing_players==2):
+                raise_call_level = 6 + round(t.position_utg_plus / 2)
+            elif(t.playing_players == 3):
+                raise_call_level = 5 + round(t.position_utg_plus / 3)
+            
             for i in range(raise_call_level):
                 raise_call_cards.update(tier[i])
 
             # bet card set
             bet_range_level = round(4 + t.position_utg_plus / 3)
+            if(t.playing_players==2):
+                bet_range_level = 6 + round(t.position_utg_plus / 2)
+            elif(t.playing_players == 3):
+                bet_range_level = 5 + round(t.position_utg_plus / 3)
+            
             bet_cards = set()
             for i in range(bet_range_level):
                 bet_cards.update(tier[i])
@@ -368,6 +384,12 @@ class Decision(DecisionBase):
             # 3-bet card set
             # bet3_range_level = round(1 + random.uniform(0, 1))
             bet3_range_level = round(1 + t.position_utg_plus / 8)
+
+            if(t.playing_players==2):
+                bet3_range_level = 1 + round(t.position_utg_plus / 2)
+            elif(t.playing_players == 3):
+                bet3_range_level = 2 + round(t.position_utg_plus / 3)
+            
             bet3_cards = set()
             for i in range(1):
                 bet3_cards.update(tier[i])
@@ -399,31 +421,33 @@ class Decision(DecisionBase):
                     self.decision = DecisionTypes.call
                     self.invest = t.minCall
                 if t.raiseButton and (crd1 in bet_cards or crd2 in bet_cards or crd1[0:2] in bet_cards):
-                    # self.decision = DecisionTypes.bet2
-                    self.decision = DecisionTypes.call
+                    self.decision = DecisionTypes.bet2
+                    # self.decision = DecisionTypes.call
                     self.invest = t.minCall
-                # else:
-                #     self.decision = DecisionTypes.fold
+                else:
+                    self.decision = DecisionTypes.fold
                 
-            elif t.bigBlind * 7 >= t.minCall and t.minCall >= t.bigBlind * 3:
+            elif t.bigBlind * 10 >= t.minCall and t.minCall >= t.bigBlind * 3:
                 
                 if (t.allInCall or t.callButton) and (crd1 in raise_call_cards or crd2 in raise_call_cards or crd1[0:2] in raise_call_cards):
-                    if t.minCall <= t.bigBlind * 7:
+                    if t.minCall <= t.bigBlind * 10:
                         self.decision = DecisionTypes.call
                         self.invest = t.minCall
                     elif (crd1 in bet3_cards or crd2 in bet3_cards or crd1[0:2] in bet3_cards):
                         self.decision = DecisionTypes.call
                         self.invest = t.minCall
+                        self.decision = DecisionTypes.bet2
+                        self.invest = t.current_betbtn_value[0]["pot"]
                     else:
                         self.decision = DecisionTypes.call
                         self.invest = t.minCall
                 if t.raiseButton and (crd1 in bet3_cards or crd2 in bet3_cards or crd1[0:2] in bet3_cards):
-                    if t.minCall <= t.bigBlind * 7:
-                        self.decision = DecisionTypes.bet3
-                        self.invest = t.current_betbtn_value[1]["pot"]
+                    if t.minCall <= t.bigBlind * 10:
+                        self.decision = DecisionTypes.bet2
+                        self.invest = t.current_betbtn_value[0]["pot"]
                     elif (crd1 in bet3_call_card or crd2 in bet3_call_card or crd1[0:2] in bet3_call_card):
-                        self.decision = DecisionTypes.bet3
-                        self.invest = t.current_betbtn_value[1]["pot"]
+                        self.decision = DecisionTypes.bet2
+                        self.invest = t.current_betbtn_value[0]["pot"]
                     else:
                         self.decision = DecisionTypes.call
             
@@ -578,8 +602,8 @@ class Decision(DecisionBase):
                                     stage + '_betting_condidion_1'] == 0):
                         self.decision = DecisionTypes.call
                         self.invest = t.minCall
-                        if float(self.invest) > float(t.myFunds*2/3):
-                            self.decision = DecisionTypes.bet5
+                        # if float(self.invest) > float(t.myFunds*2/3):
+                            # self.decision = DecisionTypes.bet5
 
                         # self.logger.info("Bet1 condition met")
                     # bet2
@@ -598,8 +622,8 @@ class Decision(DecisionBase):
                             self.invest = t.bigBlind * 3
                         else:
                             self.invest = t.minCall * 2 
-                        if float(self.invest) > float(t.myFunds* 2/3):
-                            self.decision = DecisionTypes.bet5
+                        # if float(self.invest) > float(t.myFunds* 2/3):
+                            # self.decision = DecisionTypes.bet5
                         # self.logger.info("Bet2 condition met")
                     # bet3
                     # self.logger.debug(
@@ -612,8 +636,8 @@ class Decision(DecisionBase):
                         # self.logger.info("Bet3 condition met")
                         self.decision = DecisionTypes.bet2
                         self.invest = t.current_betbtn_value[0]["pot"]
-                        if float(self.invest) > float(t.myFunds*2/3):
-                            self.decision = DecisionTypes.bet5
+                        # if float(self.invest) > float(t.myFunds*2/3):
+                            # self.decision = DecisionTypes.bet5
                     # bet4
                     # if t.allInCall == False and t.equity >= t.current_betbtn_value[2]["pot"] and \
                     #                 t.gameStage == GameStages.River.value and \
@@ -627,8 +651,8 @@ class Decision(DecisionBase):
                         # self.logger.info("Bet4 condition met")
                         self.decision = DecisionTypes.bet3
                         self.invest = t.current_betbtn_value[1]["pot"]
-                        if float(self.invest) > float(t.myFunds*2/3):
-                            self.decision = DecisionTypes.bet5
+                        # if float(self.invest) > float(t.myFunds*2/3):
+                            # self.decision = DecisionTypes.bet5
 
                     if t.current_betbtn_value[2]["pot"] > 0 and t.allInCall == False and self.finalBetLimit >= t.current_betbtn_value[2]["pot"] * 2 and \
                                 (not t.checkButton or not t.other_player_has_initiative or p.selected_strategy[
@@ -636,13 +660,13 @@ class Decision(DecisionBase):
                         # self.logger.info("Bet4 condition met")
                         self.decision = DecisionTypes.bet4
                         self.invest = t.current_betbtn_value[2]["pot"]
-                        if float(self.invest) > float(t.myFunds*2/3):
-                            self.decision = DecisionTypes.bet5
-                    if t.current_betbtn_value[2]["pot"] > 0 and t.allInCall == False and self.finalBetLimit >= t.bonatablemodel.initialFunds * 0.9 and \
-                                (not t.checkButton or not t.other_player_has_initiative or p.selected_strategy[
-                                    stage + '_betting_condidion_1'] == 0) and t.current_betbtn_value[2]["pot"] > float(t.myFunds/2):
+                        # if float(self.invest) > float(t.myFunds*2/3):
+                            # self.decision = DecisionTypes.bet5
+                    # if t.current_betbtn_value[2]["pot"] > 0 and t.allInCall == False and self.finalBetLimit >= t.bonatablemodel.initialFunds * 0.9 and \
+                    #             (not t.checkButton or not t.other_player_has_initiative or p.selected_strategy[
+                    #                 stage + '_betting_condidion_1'] == 0) and t.current_betbtn_value[2]["pot"] > float(t.myFunds/2):
                         # self.logger.info("Bet4 condition met")
-                        self.decision = DecisionTypes.bet5
+                        # self.decision = DecisionTypes.bet5
 
     def bluff(self, t, p, h):
         t.currentBluff = 0
@@ -793,13 +817,13 @@ class Decision(DecisionBase):
         # if self.decision == DecisionTypes.bet3: h.myLastBet = t.totalPotValue / 2
         # if self.decision == DecisionTypes.bet4: h.myLastBet = t.totalPotValue
     def allin_decision(self, t, p, h):
-        if self.invest > t.myFunds / 2 and (t.myFunds - self.invest) < 5 * t.bigBlind:
-            self.decision = DecisionTypes.bet5
+        # if self.invest > t.myFunds / 2 and (t.myFunds - self.invest) < 5 * t.bigBlind:
+            # self.decision = DecisionTypes.bet5
         if t.bonatablemodel.type.value =='TOUNAMENT1' or t.bonatablemodel.type.value =='TOUNAMENT2' or t.bonatablemodel.type.value =='NORMALROOM':
-            if t.myFunds < self.invest + self.invest/2 + t.bonatablemodel.bigBlind and not t.allInCall:
-                self.decision = DecisionTypes.bet5
-                print(" your funds is small more than call and bet value half so ALLIN ! ")
-            elif t.myFunds < self.invest + self.invest/2 + t.bonatablemodel.bigBlind and t.allInCall:
+            # if t.myFunds < self.invest + self.invest/2 + t.bonatablemodel.bigBlind and not t.allInCall:
+                # self.decision = DecisionTypes.bet5
+                # print(" your funds is small more than call and bet value half so ALLIN ! ")
+            if t.myFunds < self.invest + self.invest/2 + t.bonatablemodel.bigBlind and t.allInCall:
                 self.decision = DecisionTypes.call
                 print(" your funds is small more than call and bet value half so ALLINCALL ! ")
     def calc_out_call(self, t, p, h): 
@@ -807,9 +831,9 @@ class Decision(DecisionBase):
             if self.outs > 7 and t.gameStage == "Flop" and t.minCall < t.myFunds / 3:
                 self.decision = DecisionTypes.call
                 self.invest = t.minCall
-            elif self.outs > 8 and t.gameStage == "Flop" :
-                self.decision = DecisionTypes.bet5
-                self.invest = t.myFunds
+            # elif self.outs > 8 and t.gameStage == "Flop" :
+                # self.decision = DecisionTypes.bet5
+                # self.invest = t.myFunds
             elif self.outs > 8 and t.gameStage == "Turn" and t.minCall < t.myFunds / 3:
                 self.decision = DecisionTypes.call
                 self.invest = t.minCall

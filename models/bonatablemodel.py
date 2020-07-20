@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 
 # const
-Bonapoker_title_TexasHoldem_cn = r'德州扑克 '
+Bonapoker_title_TexasHoldem_cn = r'BONA NLHE '
 # Bonapoker_title_string1 = r'timeshow'
 # Bonapoker_title_string1 = r'POKARA'
 Bonapoker_title_Tounament2 = r'Freeroll'
@@ -97,9 +97,13 @@ class BonaTableModel(object):
             
             [blinds, self.room_number] = self.table_title.split(room_number_split_string)
             
-            self.smallBlind = float(re.split(blind_split_string, blinds)[0])
-            self.bigBlind = float(re.split(blind_split_string, blinds)[1])
-            
+            self.smallBlind = re.split(blind_split_string, blinds)[0]
+            if self.smallBlind.find('K') == len(self.smallBlind) - 1:
+                self.smallBlind = float(self.smallBlind.split('K')[0]) * 1000
+            else:
+                self.smallBlind = float(self.smallBlind)
+            # self.bigBlind = float(re.split(' ', re.split(blind_split_string, blinds)[1])[0])
+            self.bigBlind = 2 * self.smallBlind
             blinds_num = len(re.findall(blind_split_string, blinds))
             if blinds_num == 2:
                 table_timeout = table_name.split(Name_Time_split_string)[1]
