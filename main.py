@@ -52,8 +52,7 @@ bona_window_width = 503
 bona_window_height = 1040
 
 # You can set table display left and width value.
-display_left = - win32api.GetSystemMetrics(0)
-display_width = win32api.GetSystemMetrics(0) - display_left
+display_left = 0
 
 # You can set delay time for mouse after decision of bot
 mouse_delay_min = 0

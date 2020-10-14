@@ -332,7 +332,7 @@ class TableScreenBased(Table):
             crd1, crd2 = m.get_two_short_notation(self.mycards)
             crd1 = crd1.upper()
             crd2 = crd2.upper()
-            hand_range_level = 6
+            hand_range_level = 9
             # allowed_cards = m.get_opponent_allowed_cards_list(0.5)
             tier = [
                 ["AA", "AKS", "AKO", "AQS", "AQO", "AJS", "KK", "QQ"],
