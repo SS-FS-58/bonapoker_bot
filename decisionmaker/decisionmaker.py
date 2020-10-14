@@ -822,6 +822,9 @@ class Decision(DecisionBase):
             else:
                 self.decision = DecisionTypes.fold
             print('Now Bots are playing themself so bluff and fold in collusion')
+        elif not t.bonatablemodel.get_No_users():
+            playsound('sounds/alarm1.mp3')
+
         
 
        

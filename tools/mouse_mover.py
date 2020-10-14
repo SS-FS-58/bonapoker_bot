@@ -183,6 +183,7 @@ class MouseMoverTableBased(MouseMover):
             self.logger.info("Captcha Error")
     # add by gc 4/1
     def mouse_action(self, decision, topleftcorner,bet_val = 0):
+        if decision == 'emoji': active_emoji = topleftcorner
         if decision == 'Check Deception': decision = 'Check'
         if decision == 'Call Deception': decision = 'Call'
         if decision == 'Bet Bluff':

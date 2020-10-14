@@ -5,7 +5,7 @@ import keyboard
 
 if __name__ == '__main__':
     
-    filename = r"f:\24_Poker_bot\04_backup\Test\test8.png"
+    filename = r"e:\1_Previous_Projects\24_Poker_bot\bonapoker_bot\screenshot_log\test3.png"
         
     plt.imshow(cv2.imread(filename))
     plt.show()
